@@ -6,6 +6,8 @@ using UnityEngine;
 public class Player : MonoBehaviour {
 
     Vector3 velocity;
+    
+    float saveGravity;
     float gravity = -20f;
     public float minJumpHeight = 1;
     public float maxJumpHeight = 4;
@@ -32,34 +34,88 @@ public class Player : MonoBehaviour {
     public float wallSlideSpeedMax = 3;
     public float wallStickTime = .25f;
     float timeToWallUnstick;
+    private float jumpsToPlane = 2f;
+    private float currentJumps;
+    public GameObject umbrella;
     Controller2D controller;
 
 	// Use this for initialization
 	void Start () {
-
-
+        
+        currentJumps = 0f;
+        jumpsToPlane = 2f;
         controller = GetComponent<Controller2D>();
 
         aimDirection = Vector3.right;
         currentDashTime = maxDashTime;
-
+        
         gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
         minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpHeight);
         print("Gravity: " + gravity + " Jump Velocity: " + maxJumpVelocity);
-
-	}
+        saveGravity = gravity;
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        //print(controller.getHitTag());
-        //print(wallSliding);
-        //Time.timeScale = 1f;
+       
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         int wallDirX = (controller.collisions.left) ? -1 : 1;
 
         float targetVelocityX = input.x * moveSpeed;
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
+        //print(controller.collisions.grounded);
+       
+        if (!controller.collisions.below && !controller.collisions.left && !controller.collisions.right)
+        {
+            
+
+            if (!controller.collisions.isPlanning && velocity.y<0)
+            {
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    velocity.y = 0;
+                    umbrella.SetActive(true);
+                    currentJumps = 0f;
+                    gravity = -10f;
+                    controller.collisions.isPlanning = true;
+
+                }
+            }
+
+
+
+
+        }
+
+        if (controller.collisions.isPlanning)
+        {
+            umbrella.SetActive(true);
+
+            if (controller.collisions.below || controller.collisions.left || controller.collisions.right)
+            {
+                
+                print("out");
+                umbrella.SetActive(false);
+                
+                
+                controller.collisions.isPlanning = false;
+
+            }
+
+
+        }
+        else
+        {
+
+            gravity = saveGravity;
+            if (controller.collisions.below ||controller.collisions.left ||controller.collisions.right)
+            {
+                //gravity = saveGravity;
+                currentJumps = 0f;
+            }
+        }
+        
 
         if (input.x != 0)
         {
@@ -68,7 +124,7 @@ public class Player : MonoBehaviour {
         
 
         bool wallSliding = false;
-
+        
         if ((controller.collisions.left || controller.collisions.right) && !controller.collisions.below && velocity.y < 0){
             if (controller.getHitTag() != "Through")//PARA QUE NO FRENE SI ES PLATAFORMA Q SE MEUVE
             {
@@ -132,6 +188,19 @@ public class Player : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+
+            currentJumps++;
+            if (currentJumps == jumpsToPlane)
+            {
+                
+                umbrella.SetActive(true);
+                controller.collisions.isPlanning = true;
+                gravity =-10;
+                currentJumps = 0f;
+
+
+
+            }
             if (wallSliding && controller.getHitTag()!="Through")
             {
                 
@@ -166,6 +235,8 @@ public class Player : MonoBehaviour {
             }
             
         }
+        
+        
 
        
         if (!controller.collisions.isDashing)

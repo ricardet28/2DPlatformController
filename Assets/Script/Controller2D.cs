@@ -33,9 +33,9 @@ public class Controller2D : RaycastController {
         collisions.velocityOld = velocity;
         playerInput = input;
 
-
-        //PRUEBA
-
+       
+        //print(collisions.grounded);
+       
         if (collisions.below || (!collisions.left && !collisions.right))
         {
             hitTag = "";
@@ -64,6 +64,18 @@ public class Controller2D : RaycastController {
         {
             collisions.below = true;
         }
+
+        //check if we are grounded
+
+        /*
+        if (collisions.below)
+        {
+            if (collisions.isPlanning)
+            {
+                collisions.isPlanning = false;
+            }
+        }
+        */
 
     }
     // Update is called once per frame
@@ -163,7 +175,7 @@ public class Controller2D : RaycastController {
                     if (playerInput.y == -1)
                     {
                         collisions.fallingThroughPlatform = true;
-                        Invoke("ResetFallingThroughPlatform", 0.5f);
+                        Invoke("ResetFallingThroughPlatform", 0.1f);
                         continue;
                     }
 
@@ -273,7 +285,12 @@ public class Controller2D : RaycastController {
         public float slopeAngle, slopeAngleOld;
         public bool climbingSlope;
         public bool descendingSlope;
+
+        
         public bool isDashing;
+
+        public bool isPlanning;
+        //public bool grounded;
 
         public Vector3 velocityOld;
         public int faceDirection;
@@ -285,6 +302,7 @@ public class Controller2D : RaycastController {
             left = right = false;
             climbingSlope = false;
             descendingSlope = false;
+            //grounded = false;
             slopeAngleOld = slopeAngle;
             slopeAngle = 0;
         }
