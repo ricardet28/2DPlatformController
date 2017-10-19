@@ -9,7 +9,7 @@ public class Controller2D : RaycastController {
     public float maxClimbAngle = 80f;
     public float maxDescendAngle = 75f;
     Vector2 playerInput;
-
+    private string hitTag;
     public CollisionInfo collisions;
     // Use this for initialization
 
@@ -32,6 +32,15 @@ public class Controller2D : RaycastController {
 
         collisions.velocityOld = velocity;
         playerInput = input;
+
+
+        //PRUEBA
+
+        if (collisions.below || (!collisions.left && !collisions.right))
+        {
+            hitTag = "";
+        }
+
         if (velocity.x != 0)
         {
             collisions.faceDirection = (int)Mathf.Sign(velocity.x);
@@ -65,6 +74,7 @@ public class Controller2D : RaycastController {
 
         if (Mathf.Abs(velocity.x) < skinWidth)
         {
+
             rayLength = 2 * skinWidth;
         }
         for (int i = 0; i < horizontalRayCount; i++)
@@ -76,9 +86,14 @@ public class Controller2D : RaycastController {
 
             if (hit)
             {
+                hitTag = hit.collider.tag;
+                //print(hitTag);
                 if (hit.distance == 0)
                 {
+                   
                     continue;
+                    
+                    
                 }
 
                 float slopeAngle = Vector2.Angle(hit.normal, Vector2.up);
@@ -239,6 +254,11 @@ public class Controller2D : RaycastController {
 
     }
 
+
+    public string getHitTag()
+    {
+        return hitTag;
+    }
 
     void ResetFallingThroughPlatform()
     {

@@ -52,7 +52,8 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+        //print(controller.getHitTag());
+        //print(wallSliding);
         //Time.timeScale = 1f;
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         int wallDirX = (controller.collisions.left) ? -1 : 1;
@@ -69,14 +70,20 @@ public class Player : MonoBehaviour {
         bool wallSliding = false;
 
         if ((controller.collisions.left || controller.collisions.right) && !controller.collisions.below && velocity.y < 0){
-            wallSliding = true;
-            if (velocity.y < -wallSlideSpeedMax)
+            if (controller.getHitTag() != "Through")//PARA QUE NO FRENE SI ES PLATAFORMA Q SE MEUVE
             {
-                velocity.y = -wallSlideSpeedMax;
+                wallSliding = true;
+                if (velocity.y < -wallSlideSpeedMax)
+                {
+                    velocity.y = -wallSlideSpeedMax;
+                }
             }
+            
+            
 
             if (timeToWallUnstick > 0)
             {
+                
                 velocityXSmoothing = 0;
                 velocity.x = 0;
                 if (input.x != wallDirX && input.x != 0)
@@ -87,6 +94,9 @@ public class Player : MonoBehaviour {
                 {
                     timeToWallUnstick = wallStickTime;
                 }
+
+                
+                
                 
             }
             else
@@ -122,8 +132,9 @@ public class Player : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (wallSliding)
+            if (wallSliding && controller.getHitTag()!="Through")
             {
+                
                 if (wallDirX == input.x)
                 {
                     velocity.x = -wallDirX * wallJumpClimb.x;
