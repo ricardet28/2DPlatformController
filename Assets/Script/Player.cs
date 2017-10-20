@@ -19,6 +19,8 @@ public class Player : MonoBehaviour {
 
     private float currentDashTime;
 
+    public float gravityWhilePlaying = -20f;
+
     float maxJumpVelocity;
     float minJumpVelocity;
     float accelerationTimeAirborne = .2f;
@@ -39,9 +41,12 @@ public class Player : MonoBehaviour {
     public GameObject umbrella;
     Controller2D controller;
 
+
+    float saveVelocityY;
+    bool addVelocityY;
 	// Use this for initialization
 	void Start () {
-        
+        addVelocityY = false;
         currentJumps = 0f;
         jumpsToPlane = 2f;
         controller = GetComponent<Controller2D>();
@@ -77,7 +82,7 @@ public class Player : MonoBehaviour {
                     velocity.y = 0;
                     umbrella.SetActive(true);
                     currentJumps = 0f;
-                    gravity = -10f;
+                    gravity = gravityWhilePlaying;
                     controller.collisions.isPlanning = true;
 
                 }
@@ -192,10 +197,12 @@ public class Player : MonoBehaviour {
             currentJumps++;
             if (currentJumps == jumpsToPlane)
             {
-                
+
                 umbrella.SetActive(true);
+                saveVelocityY = velocity.y;
+                addVelocityY = true;
                 controller.collisions.isPlanning = true;
-                gravity =-10;
+                gravity = gravityWhilePlaying;
                 currentJumps = 0f;
 
 
@@ -241,8 +248,38 @@ public class Player : MonoBehaviour {
        
         if (!controller.collisions.isDashing)
         {
+            /*
+            if (controller.collisions.isPlanning)
+            {
+
+                if (velocity.y >= 0)
+                {
+                    velocity.y += gravity * Time.deltaTime;
+                }
+                else //if vel.y == 0 o inferior
+                {
+                    gravity = gravityWhilePlaying;
+                    velocity.y = gravity;
+                    
+                }
+
+            }
+
+            else
+            {
+
+                velocity.y += gravity * Time.deltaTime;
+
+            }
+           */
             velocity.y += gravity * Time.deltaTime;
+
+            
+            
         }
+        
+       
+        
         
         controller.Move(velocity * Time.deltaTime, input);
         
