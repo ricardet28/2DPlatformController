@@ -19,7 +19,8 @@ public class Player : MonoBehaviour {
 
     private float currentDashTime;
 
-    public float gravityWhilePlaying = -20f;
+    public float gravityWhilePlanning = -20f;
+    public float constantvelocityYFalling = -2.5f;
 
     float maxJumpVelocity;
     float minJumpVelocity;
@@ -27,6 +28,8 @@ public class Player : MonoBehaviour {
     float accelerationTimeGrounded = .1f;
     float velocityXSmoothing;
     public float moveSpeed;
+
+    private bool canEnableUmbrella = true;
 
     Vector3 aimDirection;
 
@@ -71,19 +74,35 @@ public class Player : MonoBehaviour {
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
         //print(controller.collisions.grounded);
        
+
+        if (aimDirection == Vector3.right)//added
+        {
+
+            this.gameObject.GetComponent<SpriteRenderer>().flipX = false;
+
+        }
+        else//added
+        {
+            this.gameObject.GetComponent<SpriteRenderer>().flipX = true;
+        }
+
         if (!controller.collisions.below && !controller.collisions.left && !controller.collisions.right)
         {
             
 
             if (!controller.collisions.isPlanning && velocity.y<0)
             {
-                if (Input.GetKeyDown(KeyCode.Space))
+                if (Input.GetKeyDown(KeyCode.Space) && canEnableUmbrella)//modified
                 {
                     velocity.y = 0;
                     umbrella.SetActive(true);
+                   
+                    gravity = gravityWhilePlanning;
+                    
                     currentJumps = 0f;
-                    gravity = gravityWhilePlaying;
+                    print("activado");
                     controller.collisions.isPlanning = true;
+                    return;
 
                 }
             }
@@ -95,29 +114,36 @@ public class Player : MonoBehaviour {
 
         if (controller.collisions.isPlanning)
         {
+            
             umbrella.SetActive(true);
 
-            if (controller.collisions.below || controller.collisions.left || controller.collisions.right)
+            
+            if (controller.collisions.below || controller.collisions.left || controller.collisions.right || Input.GetKeyDown(KeyCode.Space))
             {
                 
                 print("out");
                 umbrella.SetActive(false);
-                
+
+
+                canEnableUmbrella = false;
                 
                 controller.collisions.isPlanning = false;
+                
 
             }
 
 
         }
-        else
+        else //if not planning
         {
 
             gravity = saveGravity;
+            //umbrella.SetActive(false);
             if (controller.collisions.below ||controller.collisions.left ||controller.collisions.right)
             {
                 //gravity = saveGravity;
                 currentJumps = 0f;
+                canEnableUmbrella = true;
             }
         }
         
@@ -193,21 +219,32 @@ public class Player : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-
-            currentJumps++;
-            if (currentJumps == jumpsToPlane)
+            
+           
+             currentJumps++;
+           
+            
+            
+            
+            
+                
+            
+            
+            if (currentJumps == jumpsToPlane && canEnableUmbrella)
             {
 
                 umbrella.SetActive(true);
-                saveVelocityY = velocity.y;
-                addVelocityY = true;
+                //saveVelocityY = velocity.y;
+                //addVelocityY = true;
                 controller.collisions.isPlanning = true;
-                gravity = gravityWhilePlaying;
+                gravity = gravityWhilePlanning;
                 currentJumps = 0f;
 
 
 
             }
+
+          
             if (wallSliding && controller.getHitTag()!="Through")
             {
                 
@@ -248,31 +285,27 @@ public class Player : MonoBehaviour {
        
         if (!controller.collisions.isDashing)
         {
-            /*
-            if (controller.collisions.isPlanning)
+          
+           if (controller.collisions.isPlanning) //added
             {
-
-                if (velocity.y >= 0)
+                if (controller.collisions.descending)
+                {
+                    velocity.y = constantvelocityYFalling;
+                }
+                else//if ascending
                 {
                     velocity.y += gravity * Time.deltaTime;
                 }
-                else //if vel.y == 0 o inferior
-                {
-                    gravity = gravityWhilePlaying;
-                    velocity.y = gravity;
-                    
-                }
-
             }
 
-            else
+            else//added
             {
-
                 velocity.y += gravity * Time.deltaTime;
-
             }
-           */
-            velocity.y += gravity * Time.deltaTime;
+
+
+            
+           
 
             
             

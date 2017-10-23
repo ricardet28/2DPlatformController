@@ -26,7 +26,22 @@ public class Controller2D : RaycastController {
 
     public void Move(Vector3 velocity, Vector2 input, bool standingOnPlatform = false)
     {
+        if (collisions.below)//added
+        {
+            collisions.descending = false;
+            collisions.ascending = false;
+        }
 
+        if (collisions.descending)//added
+        {
+            print("descending!!");
+        }
+        if (collisions.ascending)//added
+        {
+            print("ascending!!");
+        }
+        //print("ascending: " + collisions.ascending);
+        //print("descending: " + collisions.descending);
         UpdateRaycastOrigins();
         collisions.Reset();
 
@@ -35,10 +50,13 @@ public class Controller2D : RaycastController {
 
        
         //print(collisions.grounded);
-       
+        
+
+
         if (collisions.below || (!collisions.left && !collisions.right))
         {
             hitTag = "";
+            
         }
 
         if (velocity.x != 0)
@@ -46,9 +64,14 @@ public class Controller2D : RaycastController {
             collisions.faceDirection = (int)Mathf.Sign(velocity.x);
         }
 
-        if (velocity.y < 0)
+        if (velocity.y < 0 && !standingOnPlatform)//added
         {
+            collisions.descending = true;
             DescendSlope(ref velocity);
+        }
+        else if (velocity.y > 0 && !standingOnPlatform)//added
+        {
+            collisions.ascending = true;
         }
         
         HorizontalCollisions(ref velocity);
@@ -286,7 +309,9 @@ public class Controller2D : RaycastController {
         public bool climbingSlope;
         public bool descendingSlope;
 
-        
+        public bool ascending;//added
+        public bool descending;//added
+
         public bool isDashing;
 
         public bool isPlanning;
@@ -302,6 +327,8 @@ public class Controller2D : RaycastController {
             left = right = false;
             climbingSlope = false;
             descendingSlope = false;
+            ascending = false;//added
+            descending = false;//added
             //grounded = false;
             slopeAngleOld = slopeAngle;
             slopeAngle = 0;
