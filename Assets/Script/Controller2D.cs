@@ -4,13 +4,14 @@ using UnityEngine;
 [RequireComponent (typeof(BoxCollider2D))]
 public class Controller2D : RaycastController {
 
-    
-
     public float maxClimbAngle = 80f;
     public float maxDescendAngle = 75f;
-    Vector2 playerInput;
-    private string hitTag;
     public CollisionInfo collisions;
+
+    private Vector2 playerInput;
+    private string hitTag;
+
+    public Vector2 PlayerInput { get { return playerInput; } }
     // Use this for initialization
 
     public override void Start()
@@ -40,18 +41,12 @@ public class Controller2D : RaycastController {
         {
             print("ascending!!");
         }
-        //print("ascending: " + collisions.ascending);
-        //print("descending: " + collisions.descending);
+
         UpdateRaycastOrigins();
         collisions.Reset();
 
         collisions.velocityOld = velocity;
         playerInput = input;
-
-       
-        //print(collisions.grounded);
-        
-
 
         if (collisions.below || (!collisions.left && !collisions.right))
         {
@@ -101,7 +96,7 @@ public class Controller2D : RaycastController {
         */
 
     }
-    // Update is called once per frame
+
     void HorizontalCollisions(ref Vector3 velocity)
     {
         float directionX = collisions.faceDirection;
@@ -256,7 +251,8 @@ public class Controller2D : RaycastController {
         
 
     }
-    void DescendSlope(ref Vector3 velocity)
+
+   void DescendSlope(ref Vector3 velocity)
     {
         float directionX = Mathf.Sign(velocity.x);
         Vector2 rayOrigin = (directionX == -1) ? raycastOrigins.bottomRight : raycastOrigins.bottomLeft;
@@ -288,7 +284,6 @@ public class Controller2D : RaycastController {
 
 
     }
-
 
     public string getHitTag()
     {

@@ -5,58 +5,57 @@ using UnityEngine;
 [RequireComponent (typeof (Controller2D))]
 public class Player : MonoBehaviour {
 
-    Vector3 velocity;
-    
-    float saveGravity;
-    float gravity = -20f;
+    public GameObject umbrella;
+    public Vector2 wallJumpClimb;
+    public Vector2 wallJumpOff;
+    public Vector2 wallLeap;
     public float minJumpHeight = 1;
     public float maxJumpHeight = 4;
     public float timeToJumpApex = 0.4f;
-
+    public float wallSlideSpeedMax = 3;
+    public float wallStickTime = .25f;
     public float maxDashTime = 1f;
     public float dashForce = 50.0f;
     public float dashStoppingSpeed = 0.1f;
-
-    private float currentDashTime;
-
     public float gravityWhilePlanning = -20f;
     public float constantvelocityYFalling = -2.5f;
+    public float moveSpeed;
 
     float maxJumpVelocity;
     float minJumpVelocity;
     float accelerationTimeAirborne = .2f;
     float accelerationTimeGrounded = .1f;
     float velocityXSmoothing;
-    public float moveSpeed;
-
-    private bool canEnableUmbrella = true;
-
-    Vector3 aimDirection;
-
-    public Vector2 wallJumpClimb;
-    public Vector2 wallJumpOff;
-    public Vector2 wallLeap;
-    public float wallSlideSpeedMax = 3;
-    public float wallStickTime = .25f;
+    float saveGravity;
+    float gravity = -20f;
     float timeToWallUnstick;
-    private float jumpsToPlane = 2f;
-    private float currentJumps;
-    public GameObject umbrella;
-    Controller2D controller;
-
-
+    float jumpsToPlane = 2f;
+    float currentJumps;
+    float currentDashTime;
+    float accelRatePerSec;
     float saveVelocityY;
+    bool canEnableUmbrella = true;
     bool addVelocityY;
-	// Use this for initialization
-	void Start () {
+    Vector3 aimDirection;
+    Vector3 velocity;
+    Controller2D controller;
+    SpriteRenderer spriteRenderer;
+
+    private void Awake()
+    {
+        controller = GetComponent<Controller2D>();
+    }
+    // Use this for initialization
+    void Start ()
+    {
         addVelocityY = false;
         currentJumps = 0f;
         jumpsToPlane = 2f;
-        controller = GetComponent<Controller2D>();
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         aimDirection = Vector3.right;
         currentDashTime = maxDashTime;
-        
         gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
         minJumpVelocity = Mathf.Sqrt(2 * Mathf.Abs(gravity) * minJumpHeight);
@@ -72,18 +71,14 @@ public class Player : MonoBehaviour {
 
         float targetVelocityX = input.x * moveSpeed;
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirborne);
-        //print(controller.collisions.grounded);
-       
 
-        if (aimDirection == Vector3.right)//added
-        {
-
-            this.gameObject.GetComponent<SpriteRenderer>().flipX = false;
-
+        if (aimDirection == Vector3.right)
+        { 
+            spriteRenderer.flipX = false;
         }
-        else//added
+        else
         {
-            this.gameObject.GetComponent<SpriteRenderer>().flipX = true;
+            spriteRenderer.flipX = true;
         }
 
         if (!controller.collisions.below && !controller.collisions.left && !controller.collisions.right)
@@ -103,36 +98,21 @@ public class Player : MonoBehaviour {
                     print("activado");
                     controller.collisions.isPlanning = true;
                     return;
-
                 }
             }
-
-
-
-
         }
 
         if (controller.collisions.isPlanning)
         {
-            
             umbrella.SetActive(true);
 
-            
             if (controller.collisions.below || controller.collisions.left || controller.collisions.right || Input.GetKeyDown(KeyCode.Space))
             {
-                
-                print("out");
                 umbrella.SetActive(false);
-
-
                 canEnableUmbrella = false;
                 
                 controller.collisions.isPlanning = false;
-                
-
             }
-
-
         }
         else //if not planning
         {
@@ -218,30 +198,15 @@ public class Player : MonoBehaviour {
 
 
         if (Input.GetKeyDown(KeyCode.Space))
-        {
-            
-           
+        {           
              currentJumps++;
-           
-            
-            
-            
-            
-                
-            
-            
+
             if (currentJumps == jumpsToPlane && canEnableUmbrella)
             {
-
                 umbrella.SetActive(true);
-                //saveVelocityY = velocity.y;
-                //addVelocityY = true;
                 controller.collisions.isPlanning = true;
                 gravity = gravityWhilePlanning;
                 currentJumps = 0f;
-
-
-
             }
 
           
@@ -279,10 +244,7 @@ public class Player : MonoBehaviour {
             }
             
         }
-        
-        
 
-       
         if (!controller.collisions.isDashing)
         {
           
@@ -303,28 +265,13 @@ public class Player : MonoBehaviour {
                 velocity.y += gravity * Time.deltaTime;
             }
 
-
-            
-           
-
-            
-            
         }
-        
-       
-        
-        
-        controller.Move(velocity * Time.deltaTime, input);
-        
 
+        controller.Move(velocity * Time.deltaTime, input);
 
         if (controller.collisions.above || controller.collisions.below)
         {
-
             velocity.y = 0;
         }
-
-       // Debug.Log(velocity);
-
     }
 }
