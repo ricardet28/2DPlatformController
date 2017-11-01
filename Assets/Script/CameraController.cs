@@ -27,7 +27,7 @@ public class CameraController : MonoBehaviour {
 
     private void Start()
     {
-        focusArea = new FocusArea(target.collider.bounds, focusAreaSize);
+        focusArea = new FocusArea(target.m_collider.bounds, focusAreaSize);
     }
 
     struct FocusArea {
@@ -76,7 +76,7 @@ public class CameraController : MonoBehaviour {
     }
     private void LateUpdate()
     {
-        focusArea.Update(target.collider.bounds);
+        focusArea.Update(target.m_collider.bounds);
 
         Vector2 focusPosition = focusArea.centre + Vector2.up * verticalOffset;
 
