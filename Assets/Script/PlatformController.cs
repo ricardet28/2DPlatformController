@@ -60,7 +60,7 @@ public class PlatformController : RaycastController {
             return Vector3.zero;
 
         }
-
+        
         fromWaypointIndex %= globalWaypoints.Length;
 
         int toWaypointIndex = (fromWaypointIndex + 1) % globalWaypoints.Length;
