@@ -4,13 +4,14 @@ using UnityEngine;
 [RequireComponent (typeof(BoxCollider2D))]
 public class Controller2D : RaycastController {
 
-    
-
     public float maxClimbAngle = 80f;
     public float maxDescendAngle = 75f;
-    Vector2 playerInput;
-    private string hitTag;
     public CollisionInfo collisions;
+
+    private Vector2 playerInput;
+    private string hitTag;
+
+    public Vector2 PlayerInput { get { return playerInput; } }
     // Use this for initialization
 
     public override void Start()
@@ -26,6 +27,20 @@ public class Controller2D : RaycastController {
 
     public void Move(Vector3 velocity, Vector2 input, bool standingOnPlatform = false)
     {
+        if (collisions.below)//added
+        {
+            collisions.descending = false;
+            collisions.ascending = false;
+        }
+
+        if (collisions.descending)//added
+        {
+            print("descending!!");
+        }
+        if (collisions.ascending)//added
+        {
+            print("ascending!!");
+        }
 
         UpdateRaycastOrigins();
         collisions.Reset();
@@ -33,12 +48,10 @@ public class Controller2D : RaycastController {
         collisions.velocityOld = velocity;
         playerInput = input;
 
-
-        //PRUEBA
-
         if (collisions.below || (!collisions.left && !collisions.right))
         {
             hitTag = "";
+            
         }
 
         if (velocity.x != 0)
@@ -46,9 +59,14 @@ public class Controller2D : RaycastController {
             collisions.faceDirection = (int)Mathf.Sign(velocity.x);
         }
 
-        if (velocity.y < 0)
+        if (velocity.y < 0 && !standingOnPlatform)//added
         {
+            collisions.descending = true;
             DescendSlope(ref velocity);
+        }
+        else if (velocity.y > 0 && !standingOnPlatform)//added
+        {
+            collisions.ascending = true;
         }
         
         HorizontalCollisions(ref velocity);
@@ -65,8 +83,20 @@ public class Controller2D : RaycastController {
             collisions.below = true;
         }
 
+        //check if we are grounded
+
+        /*
+        if (collisions.below)
+        {
+            if (collisions.isPlanning)
+            {
+                collisions.isPlanning = false;
+            }
+        }
+        */
+
     }
-    // Update is called once per frame
+
     void HorizontalCollisions(ref Vector3 velocity)
     {
         float directionX = collisions.faceDirection;
@@ -163,7 +193,7 @@ public class Controller2D : RaycastController {
                     if (playerInput.y == -1)
                     {
                         collisions.fallingThroughPlatform = true;
-                        Invoke("ResetFallingThroughPlatform", 0.5f);
+                        Invoke("ResetFallingThroughPlatform", 0.1f);
                         continue;
                     }
 
@@ -221,7 +251,8 @@ public class Controller2D : RaycastController {
         
 
     }
-    void DescendSlope(ref Vector3 velocity)
+
+   void DescendSlope(ref Vector3 velocity)
     {
         float directionX = Mathf.Sign(velocity.x);
         Vector2 rayOrigin = (directionX == -1) ? raycastOrigins.bottomRight : raycastOrigins.bottomLeft;
@@ -254,7 +285,6 @@ public class Controller2D : RaycastController {
 
     }
 
-
     public string getHitTag()
     {
         return hitTag;
@@ -273,7 +303,14 @@ public class Controller2D : RaycastController {
         public float slopeAngle, slopeAngleOld;
         public bool climbingSlope;
         public bool descendingSlope;
+
+        public bool ascending;//added
+        public bool descending;//added
+
         public bool isDashing;
+
+        public bool isPlanning;
+        //public bool grounded;
 
         public Vector3 velocityOld;
         public int faceDirection;
@@ -285,6 +322,9 @@ public class Controller2D : RaycastController {
             left = right = false;
             climbingSlope = false;
             descendingSlope = false;
+            ascending = false;//added
+            descending = false;//added
+            //grounded = false;
             slopeAngleOld = slopeAngle;
             slopeAngle = 0;
         }
