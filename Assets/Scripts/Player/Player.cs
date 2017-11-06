@@ -35,7 +35,6 @@ public class Player : MonoBehaviour {
     float accelRatePerSec;
     float saveVelocityY;
     bool canEnableUmbrella = true;
-    bool addVelocityY;
     Vector3 aimDirection;
     Vector3 velocity;
     Controller2D controller;
@@ -44,16 +43,13 @@ public class Player : MonoBehaviour {
     private void Awake()
     {
         controller = GetComponent<Controller2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
     // Use this for initialization
     void Start ()
     {
-        addVelocityY = false;
         currentJumps = 0f;
         jumpsToPlane = 2f;
-
-        spriteRenderer = GetComponent<SpriteRenderer>();
-
         aimDirection = Vector3.right;
         currentDashTime = maxDashTime;
         gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
@@ -181,7 +177,6 @@ public class Player : MonoBehaviour {
 
         if(currentDashTime < maxDashTime)//dash still activated?
         {
-            float direction = Mathf.Sign(velocity.x);
             //velocity.x += ((direction == 1) ? dashForce : -dashForce);
             velocity.x += aimDirection.x * dashForce;
             velocity.y = 0f;
