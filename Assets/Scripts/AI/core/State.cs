@@ -8,8 +8,8 @@ namespace ProjectAI
     [CreateAssetMenu(menuName = "AI/State")]
     public class State : ScriptableObject
     {
-        Action[] actions;
-        Transition[] transtions;
+        public Action[] actions;
+        public Transition[] transtions;
 
         public void UpdateState(FSMController fSMController)
         {

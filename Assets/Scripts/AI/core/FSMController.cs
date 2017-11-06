@@ -8,10 +8,11 @@ namespace ProjectAI
     public class FSMController : MonoBehaviour
     {
         [SerializeField] State m_current;
-        [SerializeField] Transform m_eyes;
         [SerializeField] bool m_isActive;
         [SerializeField] Transform chosenTarget;
         [SerializeField] State remainState;
+        [SerializeField] bool m_isEntityInRange;
+        [SerializeField] Material m_material;
 
         public State Current
         {
@@ -26,6 +27,33 @@ namespace ProjectAI
             }
         }
 
+        public bool IsEntityInRange
+        {
+            get
+            {
+                return m_isEntityInRange;
+            }
+        }
+
+        public Material Material
+        {
+            get
+            {
+                return m_material;
+            }
+
+            set
+            {
+                m_material = value;
+            }
+        }
+
+        private void Awake()
+        {
+            m_isActive = true;
+            Material = GetComponent<Material>();
+        }
+
         public void InitializeAI(bool init)
         {
             if (!init)
@@ -38,7 +66,6 @@ namespace ProjectAI
         {
             if(newState != remainState)
             {
-                //On exit state should be here or in the State class?
                 Current = newState;
             }
         }
@@ -49,6 +76,31 @@ namespace ProjectAI
             if (!m_isActive)
                 return;
             Current.UpdateState(this);
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            Transform entity = collision.gameObject.transform;
+
+            if (collision.gameObject.CompareTag("Player"))
+            {
+                m_isEntityInRange = true;
+                chosenTarget = entity;
+            }
+
+
+        }
+
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            Transform entity = collision.gameObject.transform;
+
+            if (collision.gameObject.CompareTag("Player"))
+            {
+                m_isEntityInRange = false;
+                chosenTarget = entity;
+            }
+
         }
     }
 
