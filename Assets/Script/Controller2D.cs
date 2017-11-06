@@ -10,12 +10,13 @@ public class Controller2D : RaycastController {
 
     private Vector2 playerInput;
     private string hitTag;
-
+    public Player refPlayer;
     public Vector2 PlayerInput { get { return playerInput; } }
     // Use this for initialization
 
     public override void Start()
     {
+        refPlayer = GetComponent<Player>();
         base.Start();
         collisions.faceDirection = 1;
     }
@@ -24,7 +25,7 @@ public class Controller2D : RaycastController {
     {
         Move(velocity, Vector2.zero, standingOnPlatform);
     }
-
+            
     public void Move(Vector3 velocity, Vector2 input, bool standingOnPlatform = false)
     {
         if (collisions.below)//added
@@ -33,7 +34,7 @@ public class Controller2D : RaycastController {
             collisions.ascending = false;
         }
 
-        if (collisions.descending)//added
+        if (collisions.descending)//added                
         {
             print("descending!!");
         }
@@ -94,7 +95,7 @@ public class Controller2D : RaycastController {
             }
         }
         */
-
+                         
     }
 
     void HorizontalCollisions(ref Vector3 velocity)
@@ -116,7 +117,10 @@ public class Controller2D : RaycastController {
 
             if (hit)
             {
+
+
                 hitTag = hit.collider.tag;
+  
                 //print(hitTag);
                 if (hit.distance == 0)
                 {
@@ -144,9 +148,15 @@ public class Controller2D : RaycastController {
                     velocity.x += distanceToSlopeStart * directionX;
                 }
                      
-                if (!collisions.climbingSlope || slopeAngle > maxClimbAngle)
+                if (!collisions.climbingSlope || slopeAngle > maxClimbAngle) //wall
                 {
-                   
+
+                    //change walljumping properties depending which wall we are colliding with
+                    collisions.TouchAWall = hit.collider.tag;
+                    refPlayer.SetJumpBetweenWalls(collisions.TouchAWall);
+                    print(collisions.TouchAWall);                      
+                    //change... end
+
                     velocity.x = (hit.distance - skinWidth) * directionX;
                     rayLength = hit.distance; //we gotta change our ray length due to if there is a two different height blocks our object has to be able to collide with bpth
 
@@ -285,6 +295,10 @@ public class Controller2D : RaycastController {
 
     }
 
+    
+
+
+
     public string getHitTag()
     {
         return hitTag;
@@ -297,6 +311,8 @@ public class Controller2D : RaycastController {
    
     public struct CollisionInfo
     {
+        public string TouchAWall;
+
         public bool above, below;
         public bool left, right;
 
@@ -310,12 +326,12 @@ public class Controller2D : RaycastController {
         public bool isDashing;
 
         public bool isPlanning;
-        //public bool grounded;
+        //public bool grounded;            
 
         public Vector3 velocityOld;
         public int faceDirection;
         public bool fallingThroughPlatform;
-
+               
         public void Reset()
         {
             above = below = false;
@@ -327,6 +343,7 @@ public class Controller2D : RaycastController {
             //grounded = false;
             slopeAngleOld = slopeAngle;
             slopeAngle = 0;
+            TouchAWall = "";
         }
     }
 }

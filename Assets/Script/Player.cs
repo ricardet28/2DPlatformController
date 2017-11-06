@@ -274,4 +274,38 @@ public class Player : MonoBehaviour {
             velocity.y = 0;
         }
     }
+
+
+    public void SetJumpBetweenWalls(string type)
+    {
+
+        if (type == "Climbable")
+        {
+
+            print("LOL2");
+            //5 y 17
+            //wallJumpClimb = new Vector2(5, 17);
+            wallJumpClimb.x = 5;
+            wallJumpClimb.y = 17;
+        }
+        /*
+        else if (type == "NotClimbable")
+        {
+            //4 y 10
+            //wallJumpClimb = new Vector2(4, 10);
+            wallJumpClimb.x = 4;
+            wallJumpClimb.y = 10;
+
+        }
+        */
+        else
+        {
+            print("LOL");
+            //changing properties...
+            wallJumpClimb.x = 4;
+            wallJumpClimb.y = 10;
+        }
+
+    }
+
 }
