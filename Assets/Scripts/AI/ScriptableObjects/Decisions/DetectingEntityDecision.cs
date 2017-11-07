@@ -5,12 +5,11 @@ using ProjectAI;
 
 namespace ProjectAI
 {
-    public class ActiveStateDecision : Decision
+    [CreateAssetMenu(menuName = "AI/Decision/Detecting Entity Decision")]
+    public class DetectingEntityDecision : Decision
     {
         public override bool Decide(FSMController fSMController)
         {
-            //decide which state gonna be active
-            Debug.Log("Im Deciding");
             return true;
         }
     }
