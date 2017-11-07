@@ -10,7 +10,7 @@ namespace ProjectAI
         [SerializeField] State m_current;
         [SerializeField] bool m_isActive;
         [SerializeField] Transform chosenTarget;
-        [SerializeField] State remainState;
+        [SerializeField] State defaultState;
         [SerializeField] bool m_isEntityInRange;
         [SerializeField] Material m_material;
 
@@ -51,7 +51,11 @@ namespace ProjectAI
         private void Awake()
         {
             m_isActive = true;
-            Material = GetComponent<Material>();
+        }
+
+        private void Start()
+        {
+            m_material = GetComponent<Renderer>().material;
         }
 
         public void InitializeAI(bool init)
@@ -64,7 +68,7 @@ namespace ProjectAI
 
         public void TransitionToState(State newState)
         {
-            if(newState != remainState)
+            if(newState != defaultState)
             {
                 Current = newState;
             }
@@ -76,31 +80,6 @@ namespace ProjectAI
             if (!m_isActive)
                 return;
             Current.UpdateState(this);
-        }
-
-        private void OnTriggerEnter2D(Collider2D collision)
-        {
-            Transform entity = collision.gameObject.transform;
-
-            if (collision.gameObject.CompareTag("Player"))
-            {
-                m_isEntityInRange = true;
-                chosenTarget = entity;
-            }
-
-
-        }
-
-        private void OnTriggerExit2D(Collider2D collision)
-        {
-            Transform entity = collision.gameObject.transform;
-
-            if (collision.gameObject.CompareTag("Player"))
-            {
-                m_isEntityInRange = false;
-                chosenTarget = entity;
-            }
-
         }
     }
 
