@@ -5,6 +5,7 @@ using ProjectAI;
 
 namespace ProjectAI
 {
+    [CreateAssetMenu(menuName = "AI/Actions/Idle")]
     public class Idle : Action
     {
         public override void Act(FSMController fSMController)

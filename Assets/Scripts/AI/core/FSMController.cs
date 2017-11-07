@@ -84,6 +84,7 @@ namespace ProjectAI
 
             if (collision.gameObject.CompareTag("Player"))
             {
+                Debug.Log("Player in");
                 m_isEntityInRange = true;
                 chosenTarget = entity;
             }
