@@ -10,7 +10,8 @@ namespace ProjectAI
     {
         public override void Act(FSMController fSMController)
         {
-            Debug.Log("Im Idleling");
+            fSMController.Material.color = Color.green;
+            fSMController.wireColor = Color.green;
         }
     }
 

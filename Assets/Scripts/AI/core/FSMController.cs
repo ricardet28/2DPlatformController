@@ -10,6 +10,7 @@ namespace ProjectAI
         public float detectionRadius;
         public LayerMask collisionMask;
         public int maxCollisions;
+        public Color wireColor;
 
         [SerializeField] State m_current;
         [SerializeField] bool m_isActive;
@@ -103,10 +104,8 @@ namespace ProjectAI
 
         public void TransitionToState(State newState)
         {
-            if(newState != defaultState)
-            {
                 Current = newState;
-            }
+
         }
 
         // Update is called once per frame
@@ -115,6 +114,12 @@ namespace ProjectAI
             if (!m_isActive)
                 return;
             Current.UpdateState(this);
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = wireColor;
+            Gizmos.DrawWireSphere(transform.position, detectionRadius);
         }
 
     }

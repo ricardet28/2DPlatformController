@@ -8,18 +8,22 @@ namespace ProjectAI
     [CreateAssetMenu(menuName = "AI/Decision/Detecting Entity Decision")]
     public class DetectingEntityDecision : Decision
     {
+        RaycastHit2D[] hits;
 
         public override bool Decide(FSMController fSMController)
         {
-            Physics2D.CircleCastNonAlloc(fSMController.transform.position, fSMController.detectionRadius, Vector2.zero, fSMController.Collisions);
+            hits = Physics2D.CircleCastAll(fSMController.transform.position, fSMController.detectionRadius, Vector2.zero);
 
-            for (int i = 0; i < fSMController.Collisions.Length; i++)
+            if (hits != null)
             {
-                if (fSMController.Collisions[i].transform.CompareTag("Player"))
+                for (int i = 0; i < hits.Length; i++)
                 {
-                    fSMController.ChosenTarget = fSMController.Collisions[i].transform;
-                    Debug.Log("Detected");
-                    return true;
+                    if (hits[i].transform.CompareTag("Player"))
+                    {
+                        fSMController.ChosenTarget = hits[i].transform;
+                        Debug.Log("Detected");
+                        return true;
+                    }
                 }
             }
             return false;
