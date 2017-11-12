@@ -10,7 +10,8 @@ namespace ProjectAI
     {
         public override void Act(FSMController fSM)
         {
-            //Attack
+            fSM.Material.color = Color.red;
+            fSM.wireColor = Color.red;
         }
     }
 

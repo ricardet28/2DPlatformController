@@ -7,12 +7,18 @@ namespace ProjectAI
 {
     public class FSMController : MonoBehaviour
     {
+        public float detectionRadius;
+        public LayerMask collisionMask;
+        public int maxCollisions;
+        public Color wireColor;
+
         [SerializeField] State m_current;
         [SerializeField] bool m_isActive;
         [SerializeField] Transform chosenTarget;
         [SerializeField] State defaultState;
         [SerializeField] bool m_isEntityInRange;
         [SerializeField] Material m_material;
+        [SerializeField] RaycastHit2D[] m_collisions;
 
         public State Current
         {
@@ -48,6 +54,36 @@ namespace ProjectAI
             }
         }
 
+        public RaycastHit2D[] Collisions
+        {
+            get
+            {
+                if (m_collisions == null)
+                {
+                    m_collisions = new RaycastHit2D[maxCollisions];
+                }
+                return m_collisions;
+            }
+
+            set
+            {
+                m_collisions = value;
+            }
+        }
+
+        public Transform ChosenTarget
+        {
+            get
+            {
+                return chosenTarget;
+            }
+
+            set
+            {
+                chosenTarget = value;
+            }
+        }
+
         private void Awake()
         {
             m_isActive = true;
@@ -68,10 +104,8 @@ namespace ProjectAI
 
         public void TransitionToState(State newState)
         {
-            if(newState != defaultState)
-            {
                 Current = newState;
-            }
+
         }
 
         // Update is called once per frame
@@ -80,6 +114,12 @@ namespace ProjectAI
             if (!m_isActive)
                 return;
             Current.UpdateState(this);
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = wireColor;
+            Gizmos.DrawWireSphere(transform.position, detectionRadius);
         }
 
     }
