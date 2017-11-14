@@ -5,12 +5,12 @@ using ProjectAI;
 
 namespace ProjectAI
 {
-    [CreateAssetMenu(menuName = "AI/Actions/Idle")]
-    public class Idle : Action
+    [CreateAssetMenu(fileName = "Chase", menuName = "AI/Actions/Chase")] 
+    public class Chase : Action
     {
         public override void Act(FSMController fSMController)
         {
-            fSMController.animator.SetBool("detected", false);
+            Debug.Log("Chasing");
         }
     }
 

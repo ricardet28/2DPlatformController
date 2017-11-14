@@ -12,8 +12,8 @@ namespace ProjectAI
         [SerializeField] Transform chosenTarget;
         [SerializeField] State defaultState;
         [SerializeField] bool m_isEntityInRange;
-        [SerializeField] Material m_material;
 
+        public Animator animator;
         public State Current
         {
             get
@@ -35,27 +35,15 @@ namespace ProjectAI
             }
         }
 
-        public Material Material
-        {
-            get
-            {
-                return m_material;
-            }
-
-            set
-            {
-                m_material = value;
-            }
-        }
-
         private void Awake()
         {
             m_isActive = true;
+            animator = GetComponent<Animator>();
         }
 
         private void Start()
         {
-            m_material = GetComponent<Renderer>().material;
+           
         }
 
         public void InitializeAI(bool init)
