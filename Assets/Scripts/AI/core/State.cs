@@ -16,30 +16,18 @@ namespace ProjectAI
 
         public void UpdateState(FSMController fSMController)
         {
-            DoActions(fSMController);
+            DoActions(fSMController,actions);
             CheckTranstions(fSMController);
         }
 
         public void OnExitState(FSMController fSMController)
         {
-            if (onExitActions != null)
-            {
-                for (int i = 0; i < onExitActions.Length; i++)
-                {
-                    onExitActions[i].Act(fSMController);
-                }
-            }
+            DoActions(fSMController, onExitActions);
         }
 
         public void OnEnterState(FSMController fSMController)
         {
-            if (onEnterActions != null)
-            {
-                for (int i = 0; i < onEnterActions.Length; i++)
-                {
-                    onEnterActions[i].Act(fSMController);
-                }
-            }
+            DoActions(fSMController, onEnterActions);
         }
 
         private void DoActions(FSMController fSMController, Action[] actions)
