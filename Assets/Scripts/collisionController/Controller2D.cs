@@ -12,8 +12,9 @@ public class Controller2D : RaycastController {
     private string hitTag;
     public Player refPlayer;
     public Vector2 PlayerInput { get { return playerInput; } }
-    // Use this for initialization
 
+
+    // Use this for initialization
     public override void Start()
     {
         refPlayer = GetComponent<Player>();
@@ -36,11 +37,11 @@ public class Controller2D : RaycastController {
 
         if (collisions.descending)//added                
         {
-            print("descending!!");
+            //print("descending!!");
         }
         if (collisions.ascending)//added
         {
-            print("ascending!!");
+            //print("ascending!!");
         }
 
         UpdateRaycastOrigins();
@@ -192,7 +193,7 @@ public class Controller2D : RaycastController {
 
                 if (hit.collider.CompareTag("Through"))
                 {
-                    if (directionY == 1 ||hit.distance ==0)
+                    if (directionY == 1 || hit.distance ==0)
                     {
                         continue;
                     }
