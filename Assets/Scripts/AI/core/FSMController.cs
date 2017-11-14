@@ -108,7 +108,9 @@ namespace ProjectAI
         {
             if (m_remainState != newState)
             {
+                Current.OnExitState(this);
                 Current = newState;
+                newState.OnEnterState(this);
             }
         }
 

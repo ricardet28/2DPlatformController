@@ -10,8 +10,8 @@ namespace ProjectAI
     {
         public Action[] actions;
         public Transition[] transtions;
-        public Action[] onEnterActions;
-        public Action[] onExitActions;
+        [SerializeField]public Action[] onEnterActions;
+        [SerializeField]public Action[] onExitActions;
         public Color stateColor;
 
         public void UpdateState(FSMController fSMController)
