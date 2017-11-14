@@ -10,6 +10,9 @@ namespace ProjectAI
     {
         public Action[] actions;
         public Transition[] transtions;
+        public Action[] onEnterActions;
+        public Action[] onExitActions;
+        public Color stateColor;
 
         public void UpdateState(FSMController fSMController)
         {
@@ -17,11 +20,36 @@ namespace ProjectAI
             CheckTranstions(fSMController);
         }
 
-        public void DoActions(FSMController fSMController)
+        public void OnExitState(FSMController fSMController)
         {
-            for (int i = 0; i < actions.Length; i++)
+            if (onExitActions != null)
             {
-                actions[i].Act(fSMController);
+                for (int i = 0; i < onExitActions.Length; i++)
+                {
+                    onExitActions[i].Act(fSMController);
+                }
+            }
+        }
+
+        public void OnEnterState(FSMController fSMController)
+        {
+            if (onEnterActions != null)
+            {
+                for (int i = 0; i < onEnterActions.Length; i++)
+                {
+                    onEnterActions[i].Act(fSMController);
+                }
+            }
+        }
+
+        private void DoActions(FSMController fSMController, Action[] actions)
+        {
+            if(actions != null)
+            {
+                for (int i = 0; i < actions.Length; i++)
+                {
+                    actions[i].Act(fSMController);
+                }
             }
         }
 

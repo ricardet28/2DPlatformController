@@ -11,7 +11,7 @@ namespace ProjectAI
         public override void Act(FSMController fSMController)
         {
             fSMController.Material.color = Color.green;
-            fSMController.wireColor = Color.green;
+            fSMController.Current.stateColor = Color.green;
         }
     }
 
