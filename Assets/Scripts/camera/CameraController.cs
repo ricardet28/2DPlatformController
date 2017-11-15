@@ -39,7 +39,7 @@ public class CameraController : MonoBehaviour {
 
         public FocusArea(Bounds targetBounds, Vector2 size) {
             left = targetBounds.center.x - size.x / 2;
-            right = targetBounds.center.x + size.x / 2;
+            right = targetBounds.center.x + size.x / 2 ;
             bottom = targetBounds.min.y;
             top = targetBounds.min.y + size.y;
 
