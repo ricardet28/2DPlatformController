@@ -7,13 +7,21 @@ namespace ProjectAI
 {
     public class FSMController : MonoBehaviour
     {
-        [SerializeField] State m_current;
-        [SerializeField] bool m_isActive;
-        [SerializeField] Transform chosenTarget;
-        [SerializeField] State defaultState;
-        [SerializeField] bool m_isEntityInRange;
-        [SerializeField] Material m_material;
+        public float detectionRadius;
+        public LayerMask collisionMask;
+        public int maxCollisions;
 
+        [SerializeField] State m_current;
+        [SerializeField] State m_remainState;
+        [SerializeField] State m_globalState;
+
+        [SerializeField] bool m_isAIActive;
+        [SerializeField] bool m_isEntityInRange;
+        [SerializeField] Transform chosenTarget;
+        [SerializeField] Material m_material;
+        [SerializeField] RaycastHit2D[] m_collisions;
+
+        public Animator animator;
         public State Current
         {
             get
@@ -26,7 +34,6 @@ namespace ProjectAI
                 m_current = value;
             }
         }
-
         public bool IsEntityInRange
         {
             get
@@ -34,7 +41,6 @@ namespace ProjectAI
                 return m_isEntityInRange;
             }
         }
-
         public Material Material
         {
             get
@@ -48,38 +54,76 @@ namespace ProjectAI
             }
         }
 
-        private void Awake()
+        public RaycastHit2D[] Collisions
         {
-            m_isActive = true;
+            get
+            {
+                if (m_collisions == null)
+                {
+                    m_collisions = new RaycastHit2D[maxCollisions];
+                }
+                return m_collisions;
+            }
+
+            set
+            {
+                m_collisions = value;
+            }
         }
 
-        private void Start()
+        public Transform ChosenTarget
         {
-            m_material = GetComponent<Renderer>().material;
+            get
+            {
+                return chosenTarget;
+            }
+
+            set
+            {
+                chosenTarget = value;
+            }
+        }
+
+        private void Awake()
+        {
+            m_isAIActive = true;
+            animator = GetComponent<Animator>();
         }
 
         public void InitializeAI(bool init)
         {
             if (!init)
-                m_isActive = true;
+                m_isAIActive = true;
             else
-                m_isActive = false;
+                m_isAIActive = false;
         }
 
         public void TransitionToState(State newState)
         {
-            if(newState != defaultState)
+            if (m_remainState != newState)
             {
+                Current.OnExitState(this);
                 Current = newState;
+                newState.OnEnterState(this);
             }
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (!m_isActive)
+            if (!m_isAIActive)
                 return;
+
+            if (m_globalState != null)
+                m_globalState.UpdateState(this);
+
             Current.UpdateState(this);
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Current.stateColor;
+            Gizmos.DrawWireSphere(transform.position, detectionRadius);
         }
 
     }

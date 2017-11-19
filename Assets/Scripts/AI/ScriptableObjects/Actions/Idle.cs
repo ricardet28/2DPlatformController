@@ -10,7 +10,7 @@ namespace ProjectAI
     {
         public override void Act(FSMController fSMController)
         {
-            Debug.Log("Im Idleling");
+            fSMController.animator.SetBool("detected", false);
         }
     }
 

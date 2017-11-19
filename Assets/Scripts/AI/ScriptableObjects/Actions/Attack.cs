@@ -10,7 +10,7 @@ namespace ProjectAI
     {
         public override void Act(FSMController fSM)
         {
-            //Attack
+            fSM.animator.SetBool("detected", true);
         }
     }
 
