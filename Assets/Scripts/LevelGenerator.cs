@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour {
 
-    [SerializeField]
+    [System.Serializable]
     struct EntitySpawnData
     {
         [SerializeField] public Color pixelColor;
@@ -13,6 +13,7 @@ public class LevelGenerator : MonoBehaviour {
     }
 
     public Texture2D colorMap;
+    public float ratio = 3;
     [SerializeField]List<EntitySpawnData> entitiesToSpawn = new List<EntitySpawnData>();
 
     void Start()
@@ -36,15 +37,17 @@ public class LevelGenerator : MonoBehaviour {
         Color pixelColor = colorMap.GetPixel(x, y);
 
         //Discard the transparent pixels
-        if (pixelColor.a == 0)
-            return; 
+        if (pixelColor == Color.white)
+            return;
+
+        print(pixelColor);
 
         for (int i = 0; i < entitiesToSpawn.Count; i++)
         {
-            if (pixelColor.Equals(entitiesToSpawn[i].pixelColor))
+            if (pixelColor == entitiesToSpawn[i].pixelColor)
             {
-                Vector2 spawnPos = new Vector2(x, y);
-                Instantiate(entitiesToSpawn[i].prefabToSpawn, spawnPos, Quaternion.identity, transform);
+                Vector2 spawnPos = new Vector2(x/ratio, y/ratio);
+                Instantiate(entitiesToSpawn[i].prefabToSpawn, spawnPos, Quaternion.identity,transform);
             }
         }
     }
