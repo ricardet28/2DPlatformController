@@ -17,11 +17,11 @@ namespace ProjectAI
 
         [SerializeField] bool m_isAIActive;
         [SerializeField] bool m_isEntityInRange;
+
         [SerializeField] Transform chosenTarget;
         [SerializeField] Material m_material;
         [SerializeField] RaycastHit2D[] m_collisions;
 
-        public Animator animator;
         public State Current
         {
             get
@@ -34,6 +34,7 @@ namespace ProjectAI
                 m_current = value;
             }
         }
+
         public bool IsEntityInRange
         {
             get
@@ -41,6 +42,7 @@ namespace ProjectAI
                 return m_isEntityInRange;
             }
         }
+
         public Material Material
         {
             get
@@ -87,7 +89,11 @@ namespace ProjectAI
         private void Awake()
         {
             m_isAIActive = true;
-            animator = GetComponent<Animator>();
+        }
+
+        private void Start()
+        {
+            m_material = GetComponent<Renderer>().material;
         }
 
         public void InitializeAI(bool init)
