@@ -36,3 +36,5 @@ Library/UnityAssemblies/version.txt
 Assets/_Scenes/Tutorial.unity
 Assets/_Scenes/Tutorial.unity
 ProjectSettings/ProjectVersion.txt
+*.meta
+Assets/prefabs.meta
