@@ -18,6 +18,7 @@ public class Controller2D : RaycastController {
     public override void Start()
     {
         refPlayer = GetComponent<Player>();
+        
         base.Start();
         collisions.faceDirection = 1;
     }
@@ -121,7 +122,15 @@ public class Controller2D : RaycastController {
 
 
                 hitTag = hit.collider.tag;
-  
+                
+               if (hit.collider.CompareTag("collectable"))
+                {
+                    refPlayer.setSanityPoints(+3);
+                    print(refPlayer.getSanityPoints());
+                    Destroy(hit.collider.gameObject);
+                    continue;
+                }
+
                 //print(hitTag);
                 if (hit.distance == 0)
                 {
@@ -155,7 +164,7 @@ public class Controller2D : RaycastController {
                     //change walljumping properties depending which wall we are colliding with
                     collisions.TouchAWall = hit.collider.tag;
                     refPlayer.SetJumpBetweenWalls(collisions.TouchAWall);
-                    print(collisions.TouchAWall);                      
+                    //print(collisions.TouchAWall);                      
                     //change... end
 
                     velocity.x = (hit.distance - skinWidth) * directionX;
@@ -209,6 +218,13 @@ public class Controller2D : RaycastController {
                     }
 
 
+                }
+                else if (hit.collider.CompareTag("collectable"))
+                {
+                    refPlayer.setSanityPoints(+3);
+                    print(refPlayer.getSanityPoints());
+                    Destroy(hit.collider.gameObject);
+                    continue;
                 }
                
                 velocity.y = (hit.distance - skinWidth) * directionY;
@@ -271,6 +287,9 @@ public class Controller2D : RaycastController {
 
         if (hit)
         {
+            
+
+
             float slopeAngle = Vector2.Angle(hit.normal, Vector2.up);
             if (slopeAngle!=0 && slopeAngle <= maxDescendAngle)
             {
@@ -296,8 +315,8 @@ public class Controller2D : RaycastController {
 
     }
 
-    
 
+ 
 
 
     public string getHitTag()
@@ -323,6 +342,7 @@ public class Controller2D : RaycastController {
 
         public bool ascending;//added
         public bool descending;//added
+
 
         public bool isDashing;
 

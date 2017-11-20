@@ -40,6 +40,12 @@ public class Player : MonoBehaviour {
     Controller2D controller;
     SpriteRenderer spriteRenderer;
 
+
+    //esto es provisional
+    private int sanityPoints;
+    //esto es provisional
+
+
     private void Awake()
     {
         controller = GetComponent<Controller2D>();
@@ -91,7 +97,7 @@ public class Player : MonoBehaviour {
                     gravity = gravityWhilePlanning;
                     
                     currentJumps = 0f;
-                    print("activado");
+                    //print("activado");
                     controller.collisions.isPlanning = true;
                     return;
                 }
@@ -292,5 +298,17 @@ public class Player : MonoBehaviour {
         }
 
     }
+    //provisional
+    public void setSanityPoints(int amount)
+    {
 
+        sanityPoints += amount;
+
+    }
+    public int getSanityPoints()
+    {
+
+        return sanityPoints;
+    }
+    //provisional
 }
