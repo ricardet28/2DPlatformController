@@ -10,8 +10,9 @@ namespace ProjectAI
     {
         public override void Act(FSMController fSM)
         {
+            //fSMController.animator.SetBool("detected", true);
             fSM.Material.color = Color.red;
-            fSM.wireColor = Color.red;
+            fSM.Current.stateColor = Color.red;
         }
     }
 
