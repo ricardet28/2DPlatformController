@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 726d2784a87b044f182b7487b3b8ebb8
+guid: 13ebefc2d7e92f045a5204c25dffcd73
 timeCreated: 1491272575
 licenseType: Store
 TextureImporter:
@@ -9,6 +9,7 @@ TextureImporter:
     21300004: t_rex_head
     21300006: t_rex_jaw_open_back
     21300008: t_rex_jaw_open
+  externalObjects: {}
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -17,6 +18,8 @@ TextureImporter:
     linearTexture: 0
     fadeOut: 0
     borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
     mipMapFadeDistanceStart: 1
     mipMapFadeDistanceEnd: 3
   bumpmap:
@@ -32,10 +35,13 @@ TextureImporter:
   textureFormat: -3
   maxTextureSize: 2048
   textureSettings:
+    serializedVersion: 2
     filterMode: 1
     aniso: 16
     mipBias: -1
-    wrapMode: 1
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -57,6 +63,7 @@ TextureImporter:
   platformSettings:
   - buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
@@ -78,6 +85,7 @@ TextureImporter:
       pivot: {x: 0.5103738, y: 0.22812499}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
     - serializedVersion: 2
       name: t_rex_leg
@@ -91,6 +99,7 @@ TextureImporter:
       pivot: {x: 0.46087265, y: 0.75859475}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
     - serializedVersion: 2
       name: t_rex_head
@@ -104,6 +113,7 @@ TextureImporter:
       pivot: {x: 0.123487204, y: 0.3012029}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
     - serializedVersion: 2
       name: t_rex_jaw_open_back
@@ -117,6 +127,7 @@ TextureImporter:
       pivot: {x: 0.5228305, y: 0.50609076}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
     - serializedVersion: 2
       name: t_rex_jaw_open
@@ -130,8 +141,10 @@ TextureImporter:
       pivot: {x: 0.49476063, y: 0.49506232}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
+      physicsShape: []
       tessellationDetail: -1
     outline: []
+    physicsShape: []
   spritePackingTag: trex
   userData: 97732039031345
   assetBundleName: 
