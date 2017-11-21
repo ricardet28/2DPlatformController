@@ -10,7 +10,7 @@ namespace ProjectAI
     {
         public override void Act(FSMController fSMController)
         {
-            throw new System.NotImplementedException();
+            Debug.Log("Chasing");
         }
     }
 
