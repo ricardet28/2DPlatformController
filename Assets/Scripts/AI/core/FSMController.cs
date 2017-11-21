@@ -10,15 +10,13 @@ namespace ProjectAI
         public float detectionRadius;
         public LayerMask collisionMask;
         public int maxCollisions;
+        public Color wireColor;
 
         [SerializeField] State m_current;
-        [SerializeField] State m_remainState;
-        [SerializeField] State m_globalState;
-
-        [SerializeField] bool m_isAIActive;
-        [SerializeField] bool m_isEntityInRange;
-
+        [SerializeField] bool m_isActive;
         [SerializeField] Transform chosenTarget;
+        [SerializeField] State defaultState;
+        [SerializeField] bool m_isEntityInRange;
         [SerializeField] Material m_material;
         [SerializeField] RaycastHit2D[] m_collisions;
 
@@ -88,7 +86,7 @@ namespace ProjectAI
 
         private void Awake()
         {
-            m_isAIActive = true;
+            m_isActive = true;
         }
 
         private void Start()
@@ -99,36 +97,28 @@ namespace ProjectAI
         public void InitializeAI(bool init)
         {
             if (!init)
-                m_isAIActive = true;
+                m_isActive = true;
             else
-                m_isAIActive = false;
+                m_isActive = false;
         }
 
         public void TransitionToState(State newState)
         {
-            if (m_remainState != newState)
-            {
-                Current.OnExitState(this);
                 Current = newState;
-                newState.OnEnterState(this);
-            }
+
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (!m_isAIActive)
+            if (!m_isActive)
                 return;
-
-            if (m_globalState != null)
-                m_globalState.UpdateState(this);
-
             Current.UpdateState(this);
         }
 
         private void OnDrawGizmos()
         {
-            Gizmos.color = Current.stateColor;
+            Gizmos.color = wireColor;
             Gizmos.DrawWireSphere(transform.position, detectionRadius);
         }
 
