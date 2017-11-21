@@ -10,34 +10,18 @@ namespace ProjectAI
     {
         public Action[] actions;
         public Transition[] transtions;
-        [SerializeField]public Action[] onEnterActions;
-        [SerializeField]public Action[] onExitActions;
-        public Color stateColor;
 
         public void UpdateState(FSMController fSMController)
         {
-            DoActions(fSMController,actions);
+            DoActions(fSMController);
             CheckTranstions(fSMController);
         }
 
-        public void OnExitState(FSMController fSMController)
+        public void DoActions(FSMController fSMController)
         {
-            DoActions(fSMController, onExitActions);
-        }
-
-        public void OnEnterState(FSMController fSMController)
-        {
-            DoActions(fSMController, onEnterActions);
-        }
-
-        private void DoActions(FSMController fSMController, Action[] actions)
-        {
-            if(actions != null)
+            for (int i = 0; i < actions.Length; i++)
             {
-                for (int i = 0; i < actions.Length; i++)
-                {
-                    actions[i].Act(fSMController);
-                }
+                actions[i].Act(fSMController);
             }
         }
 
